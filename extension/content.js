@@ -24,21 +24,20 @@
     const toggleBtn = document.createElement("button");
     toggleBtn.innerText = "";
     Object.assign(toggleBtn.style, {
-        position: "fixed", bottom: "20px", right: "20px", width: "50px", height: "50px",
-        backgroundColor: "rgb(230, 104, 7)", color: "white", border: "none", cursor: "pointer",
+        position: "fixed", bottom: "20px", right: "20px", width: "55px", height: "55px",
+        backgroundColor: "#282828", color: "white", border: "2px solid #FFA116", cursor: "pointer",
         zIndex: "10001", borderRadius: "50%", fontWeight: "bold", transition: "all 0.3s ease",
         display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.4)"
     });
 
     // Adding the AI logo image inside the button
     const aiImage = document.createElement("img");
-    aiImage.src = "https://ymed.io/assets/images/chatbot.gif"; // Replace with your preferred AI logo URL
+    aiImage.src = chrome.runtime.getURL("chatbot.svg"); // Ensure you have chatbot.svg in your extension folder
     aiImage.alt = "AI";
     Object.assign(aiImage.style, {
-        width: "100%", height: "100%", objectFit: "cover",
-        borderRadius: "50%",transform: "scale(1.5)",  // Adjust the scale value as needed for the zoom effect
-    objectPosition: "center"
+        width: "85%", height: "85%", objectFit: "contain",
+        borderRadius: "50%", objectPosition: "center"
     });
 
     toggleBtn.appendChild(aiImage);
@@ -125,15 +124,19 @@
         });
         code = code.trim();
 
-        let language = "Unknown";
-        if (/^\s*#include\s*</.test(code) || /int\s+main\s*\(/.test(code)) {
-            language = "C++";
-        } else if (/\bpublic\s+class\s+\w+\b/.test(code)) {
-            language = "Java";
-        } else if (/function\s+\w+\s*\(/.test(code) || /console\.log/.test(code)) {
-            language = "JavaScript";
-        } else if (/def\s+\w+\s*\(/.test(code)) {
-            language = "Python";
+        // Robust language detection covering all LeetCode languages
+        let language = "Auto-detect";
+        
+        // Look for the active language in LeetCode's DOM (Monaco editor attribute)
+        const modeElement = document.querySelector("[data-mode-id]");
+        if (modeElement) {
+            language = modeElement.getAttribute("data-mode-id");
+        } else {
+            // Fallback: Look for the language dropdown button text
+            const langBtn = document.querySelector('button[id^="headlessui-listbox-button"]');
+            if (langBtn) {
+                language = langBtn.innerText;
+            }
         }
         
         console.log("Detected Language:", language);
