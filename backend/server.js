@@ -9,7 +9,10 @@ const PORT = process.env.PORT || 5000;
 
 // Security Middlewares
 app.use(helmet()); // Sets secure HTTP headers
-app.use(cors()); // Allow all origins for the Chrome Extension, or restrict if known
+app.use(cors({
+    origin: '*', // Allow all origins
+    allowedHeaders: ['Content-Type', 'x-extension-secret'] // Allow custom headers from the extension
+}));
 app.use(express.json()); // Parse JSON bodies
 
 // Rate Limiting (Prevent Spam/DDoS)
