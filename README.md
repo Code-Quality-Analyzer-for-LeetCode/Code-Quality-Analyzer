@@ -29,4 +29,4 @@ An AI-powered Chrome Extension that helps developers analyze code quality, ident
 
 ## Author
 
-Parameshwari R
+Parameshwari R & Navaneetha C
