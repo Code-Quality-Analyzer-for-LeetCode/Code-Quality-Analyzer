@@ -17,13 +17,7 @@ app.use(cors({
 }));
 app.use(express.json()); // Parse JSON bodies
 
-// Rate Limiting (Prevent Spam/DDoS)
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, // Limit each IP to 50 requests per `window`
-    message: { error: "Too many requests from this IP, please try again later." }
-});
-app.use("/api/", apiLimiter);
+// Rate limiting removed per user request
 
 // Authentication Middleware
 // Ensures only requests with your custom Extension Secret are processed
@@ -99,6 +93,12 @@ app.post("/api/analyze", authenticateExtension, async (req, res) => {
         if (!response.ok) {
             const errorText = await response.text();
             console.error("Groq API Error:", errorText);
+            try {
+                const errObj = JSON.parse(errorText);
+                if (errObj.error && errObj.error.message) {
+                    return res.status(response.status).json({ error: errObj.error.message });
+                }
+            } catch(e) {}
             return res.status(response.status).json({ error: "Failed to communicate with AI provider." });
         }
 
