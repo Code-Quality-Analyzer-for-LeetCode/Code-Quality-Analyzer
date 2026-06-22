@@ -8,7 +8,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security Middlewares
-app.use(helmet()); // Sets secure HTTP headers
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+})); // Sets secure HTTP headers, disable CORP to allow extension fetch
 app.use(cors({
     origin: '*', // Allow all origins
     allowedHeaders: ['Content-Type', 'x-extension-secret'] // Allow custom headers from the extension
