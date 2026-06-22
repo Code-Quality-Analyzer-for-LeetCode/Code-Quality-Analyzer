@@ -29,6 +29,6 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; connect-src https://*.onrender.com/ http://localhost:5000/"
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src https://*.onrender.com http://localhost:5000"
   }
 }

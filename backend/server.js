@@ -13,7 +13,7 @@ app.use(helmet({
 })); // Sets secure HTTP headers, disable CORP to allow extension fetch
 app.use(cors({
     origin: '*', // Allow all origins
-    allowedHeaders: ['Content-Type', 'x-extension-secret'] // Allow custom headers from the extension
+    allowedHeaders: '*' // Allow all headers including custom ones
 }));
 app.use(express.json()); // Parse JSON bodies
 
